@@ -1,0 +1,42 @@
+#!/bin/bash
+
+release=${1:-"tag"}
+
+function download()
+{
+  release=$1
+  repo=$2
+  target=$3
+
+  git clone "$repo" "./$target"
+  cd "./$target" || exit
+
+  if [ "$release" == "tag" ]
+    then
+      tag=$(git describe --tags "$(git rev-list --tags --max-count=1)")
+      git checkout "$tag"
+  fi
+
+  if [ "$release" != "tag" ]
+    then
+      git checkout "$release"
+  fi
+
+  cd ../ || exit
+}
+
+if [ -d ./apps ]
+  then
+    sudo rm -rf ./apps
+fi
+
+mkdir ./apps
+cd ./apps || exit
+
+download "$release" https://github.com/abaldeweg/recipes_kitchen.git kitchen
+download "$release" https://github.com/abaldeweg/recipes_core.git core
+
+cd ../ || exit
+
+sudo docker-compose build --pull
+sudo docker-compose up -d
