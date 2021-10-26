@@ -47,6 +47,7 @@ services:
       args:
         - VUE_APP_API=${VUE_APP_API}
         - VUE_APP_I18N_LOCALE=${VUE_APP_I18N_LOCALE}
+        - VUE_APP_BASE_URL=${VUE_APP_BASE_URL}
     restart: unless-stopped
     ports:
       - 9002:80
