@@ -32,7 +32,7 @@ services:
 
   core:
     build:
-      context: ./apps/core
+      context: ./apps/core/docker/httpd
     restart: unless-stopped
     depends_on:
       - php-fpm
